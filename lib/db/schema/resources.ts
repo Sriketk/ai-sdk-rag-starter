@@ -10,7 +10,12 @@ export const resources = pgTable("resources", {
     .primaryKey()
     .$defaultFn(() => nanoid()),
   content: text("content").notNull(),
-
+  
+  // File metadata for PDF documents
+  fileName: varchar("file_name", { length: 255 }),
+  fileType: varchar("file_type", { length: 50 }),
+  fileSize: varchar("file_size", { length: 50 }),
+  
   createdAt: timestamp("created_at")
     .notNull()
     .default(sql`now()`),
@@ -26,6 +31,11 @@ export const insertResourceSchema = createSelectSchema(resources)
     id: true,
     createdAt: true,
     updatedAt: true,
+  })
+  .partial({
+    fileName: true,
+    fileType: true,
+    fileSize: true,
   });
 
 // Type for resources - used to type API request params and within Components
